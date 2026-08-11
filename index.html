@@ -136,6 +136,9 @@ svg{width:100%;height:auto;display:block;max-height:62vh;}
 .legend i{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:5px;vertical-align:middle;}
 #dtitle{font-family:'Archivo',sans-serif;font-size:19px;font-weight:800;margin:0 0 2px;}
 #dsub{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--mute);margin-bottom:8px;}
+.date-focus{display:inline-flex;align-items:center;gap:10px;margin:10px 0 7px;padding:8px 12px;border:1px solid rgba(91,141,239,.65);border-radius:7px;background:rgba(91,141,239,.12);}
+.date-focus span{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.12em;color:#9BB9F3;}
+.date-focus strong{font-family:'IBM Plex Mono',monospace;font-size:17px;letter-spacing:.03em;color:#FFF6E9;}
 .about{font-size:12px;color:#C7D0DC;line-height:1.6;margin-bottom:13px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.08);}
 .ev{border-left:2px solid var(--line);padding:7px 0 7px 10px;margin-bottom:10px;}
 .ev.hot{border-color:var(--hot);} .ev.warm{border-color:var(--warm);} .ev.cool{border-color:var(--cool);}
@@ -529,7 +532,8 @@ function drawGDetail(){
   const e=selE;
   box.innerHTML=`<h2>행사 상세</h2>
     <div id="dtitle">${e.f} ${e.n}</div>
-    <div id="dsub">${e.c} · ${e.d}</div>
+    <div class="date-focus"><span>EVENT DATE</span><strong>${e.fullDate||e.d}</strong></div>
+    <div id="dsub">${e.c} 공휴일</div>
     ${e.about?`<div class="about">${e.about}</div>`:``}
     <div class="kpi">
       <div class="kbox"><div class="kl">수요 신호</div><div class="kv" style="color:var(--hot)">${e.fc}</div></div>
@@ -664,6 +668,8 @@ function hasWeekend(a,b){let t=new Date(a),k=0;
   while(t<=b&&k++<62){const w=t.getDay();if(w===0||w===5||w===6)return true;t.setDate(t.getDate()+1);}return false;}
 function fmtRange(a,b){const f=d=>String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0');
   return (b&&b.getTime()!==a.getTime())? f(a)+'–'+f(b):f(a);}
+function fmtFullRange(a,b){const f=d=>`${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+  return (b&&b.getTime()!==a.getTime())? `${f(a)} – ${f(b)}`:f(a);}
 function parseAtt(raw){raw=raw||'';let v=parseInt(raw.replace(/[^\d]/g,''),10)||0;
   if(/만/.test(raw))v*=10000;return v;}
 function normalizeSido(raw){
@@ -705,7 +711,7 @@ function mapGlobalFromMaster(rows){const out=[];
     if(!sd||!r['행사명']||!country||country==='한국')return;
     const ed=toDate(r['종료일'])||sd;
     out.push({q:Math.ceil((sd.getMonth()+1)/3),f:flagOf(country),c:country,n:r['행사명'],
-      about:`${country} 공휴일 · 한국행 인바운드 수요를 점검할 시점`,d:fmtRange(sd,ed),
+      about:`${country} 공휴일 · 한국행 인바운드 수요를 점검할 시점`,d:fmtRange(sd,ed),fullDate:fmtFullRange(sd,ed),
       pax:'Master List',fc:'연휴 신호',stay:'—',dest:'한국',say:'',
       act:'해당 국가발 예약 리드타임·재고·가격을 확인하세요.',memo:r['수요 영향 근거']||''});
   });
@@ -716,7 +722,7 @@ function mapGlobal(rows,st){const out=[];
     if(!sd||!r['행사명']||!r['국가']){st.skipped++;return;}
     const ed=toDate(r['종료일'])||sd;
     out.push({q:Math.ceil((sd.getMonth()+1)/3),f:r['국기']||'🌏',c:r['국가'],n:r['행사명'],
-      about:r['한줄설명']||'',d:fmtRange(sd,ed),pax:r['전년방한객']||'—',fc:r['예상증감']||'—',
+      about:r['한줄설명']||'',d:fmtRange(sd,ed),fullDate:fmtFullRange(sd,ed),pax:r['전년방한객']||'—',fc:r['예상증감']||'—',
       stay:r['평균체류']||'—',dest:r['주요목적지']||'—',say:r['파트너설명']||'',
       act:r['권장조치']||'',memo:r['메모']||''});});
   return out;}
