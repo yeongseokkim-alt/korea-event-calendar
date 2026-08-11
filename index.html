@@ -490,7 +490,7 @@ function renderGlobal(){
     d.className='cc'+(selE===e?' sel':'');
     d.innerHTML=`<div class="flag">${e.f}</div><div class="cname">${e.c}</div>
       <div class="cev">${e.n}</div><div class="cdate">${e.d}</div>
-      <div class="cfc">${e.fc}</div><div class="cfcl">예상 입국 · ${e.pax}</div>`;
+      <div class="cfc">${e.fc}</div><div class="cfcl">방한 수요 데이터 · ${e.pax}</div>`;
     d.addEventListener('click',()=>{selE=e;renderGlobal();});
     box.appendChild(d);
   });
@@ -532,8 +532,8 @@ function drawGDetail(){
     <div id="dsub">${e.c} · ${e.d}</div>
     ${e.about?`<div class="about">${e.about}</div>`:``}
     <div class="kpi">
-      <div class="kbox"><div class="kl">예상 증감</div><div class="kv" style="color:var(--hot)">${e.fc}</div></div>
-      <div class="kbox"><div class="kl">전년 방한</div><div class="kv">${e.pax}</div></div>
+      <div class="kbox"><div class="kl">수요 신호</div><div class="kv" style="color:var(--hot)">${e.fc}</div></div>
+      <div class="kbox"><div class="kl">기준 데이터</div><div class="kv">${e.pax}</div></div>
     </div>
     <div class="row"><span>평균 체류</span><span>${e.stay}</span></div>
     <div class="row"><span>주요 목적지</span><span>${e.dest}</span></div>
@@ -683,6 +683,8 @@ function gradeFromImpact(raw,ev){
 }
 function mapDomestic(rows,st){const out=[];
   rows.forEach(r=>{const sd=toDate(r['시작일']);
+    // 방한 국가의 공휴일은 국내 지도 대신 Inbound 화면에서만 표시합니다.
+    if((r['행사 유형']||'').toLowerCase()==='global public holiday')return;
     const place=r['개최 도시']||r['영향 권역']||'';
     if(!sd||!r['행사명']||!place){st.skipped++;return;}
     const ed=toDate(r['종료일'])||sd;
@@ -691,6 +693,24 @@ function mapDomestic(rows,st){const out=[];
       memo:r['수요 영향 근거']||'',status:r['정보 상태']||'',source:r['공식 출처 URL']||'',checked:r['최종 확인일']||''};
     ev.lv=gradeFromImpact(r['Impact level'],ev);out.push(ev);});
   return out;}
+function flagOf(country){
+  const flags={'중국':'🇨🇳','일본':'🇯🇵','베트남':'🇻🇳','태국':'🇹🇭','미국':'🇺🇸','대만':'🇹🇼','홍콩':'🇭🇰','싱가포르':'🇸🇬','말레이시아':'🇲🇾','호주':'🇦🇺','인도':'🇮🇳'};
+  return flags[country]||'🌏';
+}
+function mapGlobalFromMaster(rows){const out=[];
+  rows.forEach(r=>{
+    if((r['행사 유형']||'').toLowerCase()!=='global public holiday')return;
+    const sd=toDate(r['시작일']); const country=(r['개최 도시']||r['영향 권역']||'').trim();
+    // Inbound는 한국 외 국가의 휴일만 대상으로 합니다.
+    if(!sd||!r['행사명']||!country||country==='한국')return;
+    const ed=toDate(r['종료일'])||sd;
+    out.push({q:Math.ceil((sd.getMonth()+1)/3),f:flagOf(country),c:country,n:r['행사명'],
+      about:`${country} 공휴일 · 한국행 인바운드 수요를 점검할 시점`,d:fmtRange(sd,ed),
+      pax:'Master List',fc:'연휴 신호',stay:'—',dest:'한국',say:'',
+      act:'해당 국가발 예약 리드타임·재고·가격을 확인하세요.',memo:r['수요 영향 근거']||''});
+  });
+  return out;
+}
 function mapGlobal(rows,st){const out=[];
   rows.forEach(r=>{const sd=toDate(r['시작일']);
     if(!sd||!r['행사명']||!r['국가']){st.skipped++;return;}
@@ -709,8 +729,10 @@ async function loadData(){
   EVENTS=[]; GEV=[];
   const st={d:'empty',g:'empty',skipped:0,dn:0,gn:0,de:''};
   if(CONFIG.DOMESTIC_CSV_URL){
-    try{const rows=mapDomestic(await fetchCSV(CONFIG.DOMESTIC_CSV_URL),st);
-      if(rows.length){EVENTS=rows;st.d='live';st.dn=rows.length;}else st.d='empty';}
+    try{const sourceRows=await fetchCSV(CONFIG.DOMESTIC_CSV_URL);
+      const rows=mapDomestic(sourceRows,st); const globalRows=mapGlobalFromMaster(sourceRows);
+      if(rows.length){EVENTS=rows;st.d='live';st.dn=rows.length;}else st.d='empty';
+      if(globalRows.length){GEV=globalRows;st.g='live';st.gn=globalRows.length;}else st.g='empty';}
     catch(e){st.d='error';st.de=e&&e.message?e.message:'브라우저 요청 차단';}}
   if(CONFIG.GLOBAL_CSV_URL){
     try{const rows=mapGlobal(await fetchCSV(CONFIG.GLOBAL_CSV_URL),st);
