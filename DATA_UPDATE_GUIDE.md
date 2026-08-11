@@ -8,6 +8,13 @@
 4. GitHub 저장소에서 기존 `Master Event List.csv`를 같은 이름의 새 파일로 교체하고 Commit changes를 누릅니다.
 5. 1~2분 뒤 https://yeongseokkim-alt.github.io/korea-event-calendar/ 를 새로고침합니다.
 
+## FX 자동 갱신
+
+- `outputs/fx.json` 는 한국은행 ECOS에서 받은 USD/KRW 최신값 스냅샷입니다.
+- GitHub Actions가 평일 17:30 KST에 `work/update-fx.mjs` 를 실행해 이 파일을 갱신합니다.
+- GitHub 저장소 `Settings → Secrets and variables → Actions` 에 `BOK_ECOS_API_KEY` 를 등록해 두어야 합니다.
+- 필요하면 `BOK_ECOS_STAT_CODE`, `BOK_ECOS_ITEM_CODE` 값만 바꿔 다른 통계표도 재사용할 수 있습니다.
+
 ## 형식 규칙
 
 - 첫 행의 17개 컬럼명은 변경하지 않습니다.
