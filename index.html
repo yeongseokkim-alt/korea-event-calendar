@@ -78,7 +78,9 @@ h1 em{font-style:normal;color:var(--hot);}
 .cc{background:var(--ink2);border:1px solid var(--line);border-radius:10px;padding:13px 12px;cursor:pointer;transition:transform .16s,border-color .16s;}
 .cc:hover{transform:translateY(-2px);border-color:var(--paper);}
 .cc.sel{border-color:var(--hot);}
-.flag{font-size:26px;line-height:1;}
+.flag{height:26px;display:flex;align-items:center;}
+.flag-img{width:32px;height:22px;object-fit:cover;border-radius:3px;border:1px solid rgba(255,255,255,.22);box-shadow:0 2px 5px rgba(0,0,0,.24);}
+.flag-detail{width:25px;height:17px;object-fit:cover;border-radius:3px;border:1px solid rgba(255,255,255,.24);vertical-align:-2px;margin-right:6px;box-shadow:0 1px 3px rgba(0,0,0,.22);}
 .cname{font-size:12.5px;font-weight:600;margin-top:7px;}
 .cev{font-size:10.5px;color:#A9B4C2;margin-top:2px;line-height:1.4;}
 .cdate{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--mute);margin-top:5px;}
@@ -491,7 +493,7 @@ function renderGlobal(){
   list.forEach((e,i)=>{
     const d=document.createElement('div');
     d.className='cc'+(selE===e?' sel':'');
-    d.innerHTML=`<div class="flag">${e.f}</div><div class="cname">${e.c}</div>
+    d.innerHTML=`<div class="flag"><img class="flag-img" src="https://flagcdn.com/w80/${e.f}.png" alt="${e.c} 국기" loading="lazy"></div><div class="cname">${e.c}</div>
       <div class="cev">${e.n}</div><div class="cdate">${e.d}</div>
       <div class="cfc">${e.fc}</div><div class="cfcl">방한 수요 데이터 · ${e.pax}</div>`;
     d.addEventListener('click',()=>{selE=e;renderGlobal();});
@@ -531,7 +533,7 @@ function drawGDetail(){
   if(hint) hint.style.display='none';
   const e=selE;
   box.innerHTML=`<h2>행사 상세</h2>
-    <div id="dtitle">${e.f} ${e.n}</div>
+    <div id="dtitle"><img class="flag-detail" src="https://flagcdn.com/w80/${e.f}.png" alt="${e.c} 국기">${e.n}</div>
     <div class="date-focus"><span>EVENT DATE</span><strong>${e.fullDate||e.d}</strong></div>
     <div id="dsub">${e.c} 공휴일</div>
     ${e.about?`<div class="about">${e.about}</div>`:``}
@@ -700,8 +702,8 @@ function mapDomestic(rows,st){const out=[];
     ev.lv=gradeFromImpact(r['Impact level'],ev);out.push(ev);});
   return out;}
 function flagOf(country){
-  const flags={'중국':'🇨🇳','일본':'🇯🇵','베트남':'🇻🇳','태국':'🇹🇭','미국':'🇺🇸','대만':'🇹🇼','홍콩':'🇭🇰','싱가포르':'🇸🇬','말레이시아':'🇲🇾','호주':'🇦🇺','인도':'🇮🇳'};
-  return flags[country]||'🌏';
+  const flags={'중국':'cn','일본':'jp','베트남':'vn','태국':'th','미국':'us','대만':'tw','홍콩':'hk','싱가포르':'sg','말레이시아':'my','호주':'au','인도':'in'};
+  return flags[country]||'un';
 }
 function mapGlobalFromMaster(rows){const out=[];
   rows.forEach(r=>{
