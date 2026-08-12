@@ -2,9 +2,11 @@
   "rate": 1421.16,
   "chg": -0.51,
   "asOf": "2026-08-11",
-  "note": "원화 약세 구간 — 외국인 입장에서 방한 여행이 상대적으로 저렴해지는 시기",
+  "note": "USD/KRW \ubcc0\ub3d9 \ucc38\uace0 \u2014 \ucd9c\ubc1c\uad6d \ud1b5\ud654\ubcc4 \uccb4\uac10 \ud658\uc728\u00b7\ud56d\uacf5\ub8cc\u00b7\uc608\uc57d \ucd94\uc774\ub97c \ud568\uaed8 \ud655\uc778\ud558\uc138\uc694.",
   "source": "BOK ECOS",
   "statCode": "731Y001",
   "itemCode": "0000001",
+  "status": "ok",
+  "lastSuccessfulAt": "2026-08-11 13:20 KST",
   "updatedAt": "2026-08-11T13:20:00+09:00"
 }

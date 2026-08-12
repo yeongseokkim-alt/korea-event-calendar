@@ -5,22 +5,27 @@ on:
     - cron: '30 8 * * 1-5'
   workflow_dispatch:
 
+concurrency:
+  group: update-fx-snapshot
+  cancel-in-progress: false
+
 jobs:
   update-fx:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
       - name: Refresh FX snapshot from ECOS
         run: node work/update-fx.mjs
         env:
           BOK_ECOS_API_KEY: ${{ secrets.BOK_ECOS_API_KEY }}
           BOK_ECOS_STAT_CODE: 731Y001
-          BOK_ECOS_ITEM_CODE: 0000001
+          BOK_ECOS_ITEM_CODE: '0000001'
           BOK_ECOS_LOOKBACK_DAYS: 30
       - name: Commit updated snapshot
         run: |

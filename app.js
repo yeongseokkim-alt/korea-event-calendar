@@ -91,7 +91,7 @@
     }
   };
   const APP_YEAR = 2026;
-  const state = {view:'home',q:4,region:null,city:null,date:'',eventId:'',globalKey:'',marketYear:2025,marketCode:'cn',fx:{rate:1421.16,chg:-0.51,asOf:'2026-08-11',note:'USD/KRW 변동 참고 — 출발국 통화별 체감 환율은 별도 확인 필요'}};
+  const state = {view:'home',q:4,region:null,city:null,date:'',eventId:'',globalKey:'',marketYear:2025,marketCode:'cn',fx:{rate:1421.16,chg:-0.51,asOf:'2026-08-11',note:'USD/KRW 변동 참고 — 출발국 통화별 체감 환율·항공료·예약 추이를 함께 확인하세요.',source:'BOK ECOS',status:'fallback',lastSuccessfulAt:'2026-08-11 13:20 KST'}};
 
   const text = (v) => String(v || '').trim();
   const esc = (v) => text(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -141,8 +141,22 @@
     $('#eventModal').classList.add('show');
   }
 
-  async function loadFx() { try { const res=await fetch('./fx.json',{cache:'no-store'}); if(res.ok) state.fx={...state.fx,...await res.json()}; } catch (_) {} }
-  function renderFx() { const f=state.fx, up=f.chg>=0, stamp=text(f.updatedAt||f.asOf); $('#fxrow').innerHTML=`<div class="fxbox"><div class="fxl">USD/KRW · ${esc(f.asOf)} 기준</div><div class="fxv">${Number(f.rate).toLocaleString()}</div><div class="fxd ${up?'up':'down'}">${up?'▲':'▼'} ${Math.abs(Number(f.chg)).toFixed(2)}%</div><div class="fxread">${esc(f.note)}<br>출처: ${esc(f.source||'로컬 기준값')} · 최종 갱신: ${esc(stamp)}</div></div>`; }
+  function isValidFx(value) { return value && Number.isFinite(Number(value.rate)) && Number(value.rate) >= 500 && Number(value.rate) <= 3000 && Number.isFinite(Number(value.chg)) && /^\d{4}-\d{2}-\d{2}$/.test(text(value.asOf)); }
+  function fxAgeDays(asOf) { const date=new Date(`${asOf}T00:00:00Z`); return Number.isFinite(date.getTime()) ? Math.max(0,Math.floor((Date.now()-date.getTime())/86400000)) : null; }
+  async function loadFx() {
+    try {
+      const res=await fetch('./fx.json',{cache:'no-store'});
+      if(!res.ok) throw new Error(`FX snapshot unavailable (${res.status})`);
+      const payload=await res.json();
+      if(!isValidFx(payload)) throw new Error('FX snapshot validation failed');
+      state.fx={...state.fx,...payload,status:'ok'};
+    } catch (_) { state.fx={...state.fx,status:'fallback'}; }
+  }
+  function renderFx() {
+    const f=state.fx, up=Number(f.chg)>=0, stamp=text(f.lastSuccessfulAt||f.updatedAt||f.asOf), age=fxAgeDays(f.asOf);
+    const freshness=f.status==='fallback'?'자동 갱신 확인 불가 · 마지막 정상 값 표시':age!==null&&age>3?`기준일 ${age}일 경과 · 갱신 상태 확인 필요`:'자동 갱신 정상';
+    $('#fxrow').innerHTML=`<div class="fxbox"><div class="fxl">USD/KRW · ${esc(f.asOf)} 기준</div><div class="fxv">${Number(f.rate).toLocaleString()}</div><div class="fxd ${up?'up':'down'}">${up?'▲':'▼'} ${Math.abs(Number(f.chg)).toFixed(2)}%</div><div class="fxread">${esc(f.note)}<br>출처: ${esc(f.source||'로컬 기준값')} · 최종 성공 갱신: ${esc(stamp)}<br>${esc(freshness)}</div></div>`;
+  }
   function renderBars() { const max=Math.max(...Object.values(totals)); $('#annBars').innerHTML=Object.entries(totals).map(([year,value])=>`<div class="bcol"><div class="bval">${(value/1000).toFixed(1)}M</div><div class="bbar ${year==='2026'?'fc':''}" style="height:${Math.round(value/max*100)}%"></div><div class="blab">${year}${year==='2026'?'<span class="fcbadge">전망</span>':''}</div></div>`).join(''); $('#annNote').innerHTML='단위 백만 명 · 2023–2025: KTO 공식 통계 참조 · 2026: 운영용 전망 참고치(추정, 기준일 2026-08-11)'; }
   function renderQuarterBars() {
     const values=quarterTotals[state.q], max=Math.max(...Object.values(values));

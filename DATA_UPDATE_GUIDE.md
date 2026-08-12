@@ -10,10 +10,11 @@
 
 ## FX 자동 갱신
 
-- `outputs/fx.json` 는 한국은행 ECOS에서 받은 USD/KRW 최신값 스냅샷입니다.
+- 저장소 루트의 `fx.json` 은 한국은행 ECOS에서 받은 USD/KRW 최신값 스냅샷입니다.
 - GitHub Actions가 평일 17:30 KST에 `work/update-fx.mjs` 를 실행해 이 파일을 갱신합니다.
 - GitHub 저장소 `Settings → Secrets and variables → Actions` 에 `BOK_ECOS_API_KEY` 를 등록해 두어야 합니다.
-- 필요하면 `BOK_ECOS_STAT_CODE`, `BOK_ECOS_ITEM_CODE` 값만 바꿔 다른 통계표도 재사용할 수 있습니다.
+- 갱신이 실패해도 기존의 마지막 정상 `fx.json` 값은 유지됩니다. 화면에서 `최종 성공 갱신` 시각을 확인하세요.
+- ECOS 통계 코드·항목 코드는 워크플로에서 관리합니다. API 키·요청 URL은 코드나 로그에 기록하지 않습니다.
 
 ## 형식 규칙
 
