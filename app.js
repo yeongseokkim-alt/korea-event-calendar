@@ -37,6 +37,9 @@
   const inboundOverviewStyle = document.createElement('style');
   inboundOverviewStyle.textContent = `#fxrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:12px}#fxrow .fxbox{min-width:0;display:flex;flex-direction:column;padding:14px 16px;background:rgba(255,255,255,.58);border-color:#C8D1E5}#fxrow .fxl{font-size:10px;font-weight:700;color:#5264A5;letter-spacing:.04em}#fxrow .fxv{font-size:28px;line-height:1.15;margin-top:8px}#fxrow .fxd{font-size:11px;margin-top:5px}#fxrow .fxread{margin-top:auto;padding-top:12px;line-height:1.55;color:#526070}#fxrow .fxread a{color:#5264A5;text-decoration:underline;text-underline-offset:2px}.monthly-box .fxv{color:#C94A63}.monthly-box .fxd{color:#A05C8B}.quarter-chart-card::before{display:none}.quarter-chart-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}.quarter-chart-head h2{margin:0!important}.quarter-chart-head .seg{flex-shrink:0}.market-map{margin-top:18px}@media(max-width:620px){#fxrow{grid-template-columns:1fr}#fxrow .fxbox{min-height:0}.quarter-chart-head{align-items:flex-start;flex-direction:column;gap:8px}.quarter-chart-head .seg{width:100%}.quarter-chart-head .seg button{flex:1}}`;
   document.head.appendChild(inboundOverviewStyle);
+  const campaignStyle = document.createElement('style');
+  campaignStyle.textContent = `body.campaign-modal-open{overflow:hidden}.campaign-overlay[hidden]{display:none}.campaign-overlay{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:12px}.campaign-backdrop{position:absolute;inset:0;background:rgba(22,32,52,.72);backdrop-filter:blur(6px)}.campaign-dialog{position:relative;z-index:1;display:flex;flex-direction:column;width:min(1040px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:hidden;border:1px solid rgba(255,255,255,.8);border-radius:18px;background:#F7F9FC;box-shadow:0 24px 70px rgba(16,28,48,.32)}.campaign-header,.campaign-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px}.campaign-header{border-bottom:1px solid #D9E1EC}.campaign-header__eyebrow{display:block;color:#A05C8B;font:700 9px var(--font-agoda-rg);letter-spacing:.15em}.campaign-header h2{margin:3px 0 0;color:#222D47;font:800 17px var(--font-agoda-he)}.campaign-close{flex:none;width:34px;height:34px;border:1px solid #CBD5E1;border-radius:50%;background:#fff;color:#222D47;font-size:21px;line-height:1;cursor:pointer}.campaign-close:hover,.campaign-close:focus-visible{border-color:#C94A63;background:#FFF3F6}.campaign-media{min-height:0;overflow:auto;background:#fff}.campaign-media img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:contain}.campaign-footer{border-top:1px solid #D9E1EC;font:10px var(--font-agoda-rg);color:#526070}.campaign-footer__actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.campaign-footer a,.campaign-footer button{display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:7px 11px;border-radius:7px;font:700 10px var(--font-agoda-rg);text-decoration:none;cursor:pointer}.campaign-footer a{border:1px solid #C8D1E5;background:#fff;color:#344B8F}.campaign-footer button{border:1px solid #222D47;background:#222D47;color:#fff}.campaign-dialog :focus-visible{outline:3px solid rgba(123,141,216,.65);outline-offset:2px}@media(max-width:560px){.campaign-overlay{padding:8px}.campaign-dialog{width:calc(100vw - 16px);max-height:calc(100dvh - 16px);border-radius:12px}.campaign-header,.campaign-footer{padding:10px 12px}.campaign-footer{align-items:stretch;flex-direction:column}.campaign-footer__actions{justify-content:stretch}.campaign-footer a,.campaign-footer button{flex:1}.campaign-header h2{font-size:15px}}`;
+  document.head.appendChild(campaignStyle);
 
   const $ = (s) => document.querySelector(s);
   const APP_REVISION = '2026.09.29';
@@ -188,6 +191,45 @@
   }
   function adr(r) { const n=Number(String(r['ADR 상승율(YoY)']||'').replace(/[^0-9.-]/g,'')); return Number.isFinite(n) && n > 0 ? `<span class="adr-badge"><span class="adr-label">ADR 예상 추정치</span><strong>+${Math.round(n)}%</strong></span>` : ''; }
   function show(view) { state.view=view; $('#home').style.display=view==='home'?'flex':'none'; $('#global').style.display=view==='global'?'block':'none'; $('#domestic').style.display=view==='domestic'?'block':'none'; if(view==='global') renderGlobal(); if(view==='domestic') renderDomestic(); window.scrollTo({top:0,behavior:'instant'}); }
+  const campaignStorageKey = 'agoda-campaign-2026-q4-dismissed';
+  let campaignDismissed = false;
+  let campaignReturnFocus = null;
+  try { campaignDismissed = sessionStorage.getItem(campaignStorageKey) === '1'; } catch (_) { /* Session storage may be unavailable. */ }
+  function closeCampaignPopup() {
+    const overlay = $('#campaignOverlay');
+    if(!overlay || overlay.hidden) return;
+    overlay.hidden = true;
+    overlay.setAttribute('aria-hidden','true');
+    document.body.classList.remove('campaign-modal-open');
+    campaignDismissed = true;
+    try { sessionStorage.setItem(campaignStorageKey,'1'); } catch (_) { /* Keep the in-memory dismissal. */ }
+    if(campaignReturnFocus?.isConnected) campaignReturnFocus.focus();
+  }
+  function openCampaignPopup() {
+    if(campaignDismissed || Date.now() >= Date.parse('2027-01-05T00:00:00+09:00')) return;
+    let overlay = $('#campaignOverlay');
+    if(!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'campaignOverlay';
+      overlay.className = 'campaign-overlay';
+      overlay.hidden = true;
+      overlay.setAttribute('aria-hidden','true');
+      const imageFile = encodeURIComponent('26년 4분기 기획전.png');
+      const imageUrl = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
+        ? `https://yeongseokkim-alt.github.io/korea-event-calendar/${imageFile}`
+        : `./${imageFile}`;
+      overlay.innerHTML = `<div class="campaign-backdrop" aria-hidden="true"></div><div class="campaign-dialog" role="dialog" aria-modal="true" aria-labelledby="campaignTitle"><div class="campaign-header"><div><span class="campaign-header__eyebrow">AGODA CAMPAIGN</span><h2 id="campaignTitle">2026 4분기 기획전</h2></div><button type="button" class="campaign-close" aria-label="기획전 팝업 닫기">×</button></div><div class="campaign-media"><img src="${imageUrl}" alt="Agoda 2026 4분기 기획전 일정 안내 이미지. 10월부터 2027년 1월까지의 주요 캠페인을 주별로 정리했습니다."></div><div class="campaign-footer"><span>기획전 일정을 확인한 뒤 캘린더를 계속 탐색하세요.</span><div class="campaign-footer__actions"><a href="${imageUrl}" target="_blank" rel="noopener">이미지 크게 보기 ↗</a><button type="button" class="campaign-continue">닫고 계속 보기</button></div></div></div>`;
+      document.body.appendChild(overlay);
+      overlay.querySelector('.campaign-backdrop').addEventListener('click',closeCampaignPopup);
+      overlay.querySelector('.campaign-close').addEventListener('click',closeCampaignPopup);
+      overlay.querySelector('.campaign-continue').addEventListener('click',closeCampaignPopup);
+    }
+    campaignReturnFocus = state.view === 'global' ? $('#backHome1') : $('#backHome2');
+    overlay.hidden = false;
+    overlay.setAttribute('aria-hidden','false');
+    document.body.classList.add('campaign-modal-open');
+    overlay.querySelector('.campaign-close').focus();
+  }
   function card(r, active=false) { const status=text(r['정보 상태']); return `<article class="ev ${active?'active ':''}${impact(r)==='수요 높음'?'hot':'warm'}" data-event="${esc(r['Event ID'])}" role="button" tabindex="0"><div class="ed">${displayDate(r['시작일'])}–${displayDate(r['종료일'])} · ${esc(city(r))}${status?` · ${esc(status)}`:''}</div><div class="en">${esc(r['행사명'])}${adr(r)}</div><div class="ep"><b>${esc(impact(r))}</b> · 규모 정보: ${esc(size(r))}</div><div class="em">${esc(r['수요 영향 근거'])}</div></article>`; }
   function activate(el, fn) { el.addEventListener('click',fn); el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fn();}}); }
   function bindEvents(root) { root.querySelectorAll('[data-event]').forEach(el => activate(el, () => openModal(eventById(el.dataset.event)))); }
@@ -470,7 +512,20 @@
     const homeYear=$('#home .home-status .status-chip:last-child strong'); if(homeYear) homeYear.textContent=yearLabel;
     document.querySelectorAll('.dataStatus').forEach(el=>el.textContent=ready?`Master Event List bundle 연결됨 · 국내 자료 ${count}건 · ${excluded}건 제외(일정/도시/권역 기준)`:'Master Event List bundle을 불러오지 못했습니다');
     ['gateG','gateD'].forEach(id=>{const el=$('#'+id);el.setAttribute('role','button');el.setAttribute('tabindex','0');});
-    activate($('#gateG'),()=>show('global')); activate($('#gateD'),()=>show('domestic')); $('#backHome1').onclick=()=>show('home'); $('#backHome2').onclick=()=>show('home'); $('#eventModalBackdrop').onclick=()=>$('#eventModal').classList.remove('show'); $('#eventModalClose').onclick=()=>$('#eventModal').classList.remove('show'); document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#eventModal').classList.remove('show');});
+    activate($('#gateG'),()=>{show('global');openCampaignPopup();}); activate($('#gateD'),()=>{show('domestic');openCampaignPopup();}); $('#backHome1').onclick=()=>show('home'); $('#backHome2').onclick=()=>show('home'); $('#eventModalBackdrop').onclick=()=>$('#eventModal').classList.remove('show'); $('#eventModalClose').onclick=()=>$('#eventModal').classList.remove('show'); document.addEventListener('keydown',e=>{
+      const campaign = $('#campaignOverlay');
+      if(campaign && !campaign.hidden) {
+        if(e.key==='Escape') { e.preventDefault(); closeCampaignPopup(); }
+        if(e.key==='Tab') {
+          const focusable=[...campaign.querySelectorAll('button,a')];
+          const first=focusable[0], last=focusable.at(-1);
+          if(e.shiftKey && document.activeElement===first) { e.preventDefault(); last.focus(); }
+          else if(!e.shiftKey && document.activeElement===last) { e.preventDefault(); first.focus(); }
+        }
+        return;
+      }
+      if(e.key==='Escape') $('#eventModal').classList.remove('show');
+    });
     loadFx().then(()=>{ if(state.view==='global') renderFx(); });
     loadMonthlyInbound().then(()=>{ if(state.view==='global') renderFx(); });
   }
