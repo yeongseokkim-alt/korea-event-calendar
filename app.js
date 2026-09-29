@@ -34,6 +34,9 @@
   const marketBoardStyle = document.createElement('style');
   marketBoardStyle.textContent = `.market-board{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.market-card{min-width:0;background:linear-gradient(180deg,#FFFFFF 0%,#F4F6FC 100%);border:1px solid #C8D1E5;border-radius:12px;padding:13px;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}.market-card:hover{transform:translateY(-3px);box-shadow:0 10px 20px rgba(34,45,71,.10);border-color:#7B8DD8}.market-card.sel{border:2px solid #A05C8B;padding:12px;box-shadow:0 8px 18px rgba(160,92,139,.14)}.market-card-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.market-flag{width:28px;height:19px;object-fit:cover;border-radius:4px;box-shadow:0 1px 4px rgba(34,45,71,.2)}.market-rank{font-family:var(--font-agoda-rg);font-size:9px;letter-spacing:.12em;color:#7B8DD8}.market-card h3{margin:11px 0 3px;font-family:var(--font-agoda-he);font-size:17px;color:#222D47}.market-card-value{font-family:var(--font-agoda-he);font-size:20px;color:#C94A63;letter-spacing:-.02em}.market-card-meta{font-family:var(--font-agoda-rg);font-size:9px;color:#66736A;margin-top:3px}.market-growth{font-family:var(--font-agoda-rg);font-size:10px;color:#A05C8B;margin:8px 0 10px;font-weight:700}.market-bars{display:flex;gap:4px;align-items:flex-end;height:31px;border-bottom:1px solid #D5DCEB;padding-bottom:3px}.market-bars i{display:block;flex:1;min-width:0;border-radius:3px 3px 1px 1px;background:#B7C2E8}.market-bars i:last-child{background:#C94A63}.market-years{display:flex;justify-content:space-between;font-family:var(--font-agoda-rg);font-size:8px;color:#7B8DD8;margin-top:5px}.market-insight{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin-top:13px;padding:13px 15px;background:linear-gradient(90deg,rgba(160,92,139,.15),rgba(123,141,216,.11));border:1px solid #C8D1E5;border-radius:12px}.market-insight-title{font-family:var(--font-agoda-he);font-size:18px;color:#222D47}.market-insight-copy{font-size:10.5px;color:#334155;line-height:1.6;margin-top:3px}.market-insight-stats{display:flex;gap:15px}.market-insight-stats div{font-family:var(--font-agoda-rg);font-size:9px;color:#66736A}.market-insight-stats b{display:block;font-family:var(--font-agoda-he);font-size:16px;color:#C94A63;margin-top:2px}@media(max-width:850px){.market-board{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:560px){.market-board{grid-template-columns:repeat(2,minmax(0,1fr))}.market-insight{grid-template-columns:1fr}.market-insight-stats{justify-content:flex-start}}`;
   document.head.appendChild(marketBoardStyle);
+  const inboundOverviewStyle = document.createElement('style');
+  inboundOverviewStyle.textContent = `#fxrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:12px}#fxrow .fxbox{min-width:0;display:flex;flex-direction:column;padding:14px 16px;background:rgba(255,255,255,.58);border-color:#C8D1E5}#fxrow .fxl{font-size:10px;font-weight:700;color:#5264A5;letter-spacing:.04em}#fxrow .fxv{font-size:28px;line-height:1.15;margin-top:8px}#fxrow .fxd{font-size:11px;margin-top:5px}#fxrow .fxread{margin-top:auto;padding-top:12px;line-height:1.55;color:#526070}#fxrow .fxread a{color:#5264A5;text-decoration:underline;text-underline-offset:2px}.monthly-box .fxv{color:#C94A63}.monthly-box .fxd{color:#A05C8B}.quarter-chart-card::before{display:none}.quarter-chart-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}.quarter-chart-head h2{margin:0!important}.quarter-chart-head .seg{flex-shrink:0}.market-map{margin-top:18px}@media(max-width:620px){#fxrow{grid-template-columns:1fr}#fxrow .fxbox{min-height:0}.quarter-chart-head{align-items:flex-start;flex-direction:column;gap:8px}.quarter-chart-head .seg{width:100%}.quarter-chart-head .seg button{flex:1}}`;
+  document.head.appendChild(inboundOverviewStyle);
 
   const $ = (s) => document.querySelector(s);
   const APP_REVISION = '2026.09.29';
@@ -92,7 +95,7 @@
     }
   };
   const DEFAULT_YEAR = 2026;
-  const state = {view:'home',year:DEFAULT_YEAR,q:4,region:null,city:null,date:'',eventId:'',globalKey:'',marketYear:2025,marketCode:'cn',fx:{rate:1421.16,chg:-0.51,asOf:'2026-08-11',note:'USD/KRW 변동 참고 — 출발국 통화별 체감 환율·항공료·예약 추이를 함께 확인하세요.',source:'BOK ECOS',status:'fallback',lastSuccessfulAt:'2026-08-11 13:20 KST'}};
+  const state = {view:'home',year:DEFAULT_YEAR,q:4,region:null,city:null,date:'',eventId:'',globalKey:'',marketYear:2025,marketCode:'cn',monthlyInbound:null,monthlyStatus:'loading',fx:{rate:1421.16,chg:-0.51,asOf:'2026-08-11',note:'USD/KRW 변동 참고 — 출발국 통화별 체감 환율·항공료·예약 추이를 함께 확인하세요.',source:'BOK ECOS',status:'fallback',lastSuccessfulAt:'2026-08-11 13:20 KST'}};
   const mapRuntime = { renderId:0, svgPromise:null, diagnostics:[] };
 
   const text = (v) => String(v || '').trim();
@@ -208,10 +211,33 @@
       state.fx={...state.fx,...payload,status:'ok'};
     } catch (_) { state.fx={...state.fx,status:'fallback'}; }
   }
+  async function loadMonthlyInbound() {
+    try {
+      const res=await fetch('./inbound-monthly.json',{cache:'no-store'});
+      if(!res.ok) throw new Error(`Monthly inbound snapshot unavailable (${res.status})`);
+      const data=await res.json();
+      if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(data.period) ||
+         !/^\d{4}-\d{2}-\d{2}$/.test(data.publishedAt) ||
+         !Number.isFinite(data.visitorsRounded) || data.visitorsRounded<=0 ||
+         !Number.isFinite(data.yearOverYearPercent) ||
+         !/^https:\/\/www\.korea\.kr\//.test(data.sourceUrl)) throw new Error('Monthly inbound snapshot validation failed');
+      state.monthlyInbound=data;
+      state.monthlyStatus='ready';
+    } catch (error) {
+      console.warn('[Event Calendar] Monthly inbound data could not be loaded:',error);
+      state.monthlyInbound=null;
+      state.monthlyStatus='unavailable';
+    }
+  }
   function renderFx() {
     const f=state.fx, up=Number(f.chg)>=0, stamp=text(f.lastSuccessfulAt||f.updatedAt||f.asOf), age=fxAgeDays(f.asOf);
     const freshness=f.status==='fallback'?'자동 갱신 확인 불가 · 마지막 정상 값 표시':age!==null&&age>3?`기준일 ${age}일 경과 · 갱신 상태 확인 필요`:'자동 갱신 정상';
-    $('#fxrow').innerHTML=`<div class="fxbox"><div class="fxl">USD/KRW · ${esc(f.asOf)} 기준</div><div class="fxv">${Number(f.rate).toLocaleString()}</div><div class="fxd ${up?'up':'down'}">${up?'▲':'▼'} ${Math.abs(Number(f.chg)).toFixed(2)}%</div><div class="fxread">${esc(f.note)}<br>출처: ${esc(f.source||'로컬 기준값')} · 최종 성공 갱신: ${esc(stamp)}<br>${esc(freshness)}</div></div>`;
+    const m=state.monthlyInbound;
+    const monthly=m
+      ? `<div class="fxbox monthly-box"><div class="fxl">월간 방한 외래관광객 · ${esc(m.period.slice(0,4))}년 ${Number(m.period.slice(5))}월</div><div class="fxv">약 ${Math.round(m.visitorsRounded/10000).toLocaleString()}만 명</div><div class="fxd">전년 동월 대비 ${m.yearOverYearPercent>=0?'+':''}${m.yearOverYearPercent.toFixed(1)}% · 공식 발표</div><div class="fxread">${esc(m.note)}<br><a href="${esc(m.sourceUrl)}" target="_blank" rel="noopener">출처: ${esc(m.source)} · ${esc(m.publishedAt)} 발표 ↗</a><br>환율과 기준 시점이 다르며, 월간 자료는 수동 갱신됩니다.</div></div>`
+      : `<div class="fxbox monthly-box"><div class="fxl">월간 방한 외래관광객</div><div class="fxv">${state.monthlyStatus==='loading'?'확인 중…':'자료 확인 불가'}</div><div class="fxread">공식 월간 자료를 불러오지 못해 수치를 표시하지 않습니다. 환율 데이터와 별도로 관리됩니다.</div></div>`;
+    const heading=$('#global .k-macro h2'); if(heading) heading.textContent='환율 · 방한 입국 현황';
+    $('#fxrow').innerHTML=`<div class="fxbox"><div class="fxl">원 · 달러 환율 · USD/KRW · ${esc(f.asOf)} 기준</div><div class="fxv">${Number(f.rate).toLocaleString()}</div><div class="fxd ${up?'up':'down'}">${up?'▲':'▼'} ${Math.abs(Number(f.chg)).toFixed(2)}%</div><div class="fxread">${esc(f.note)}<br>출처: ${esc(f.source||'로컬 기준값')} · 최종 성공 갱신: ${esc(stamp)}<br>${esc(freshness)}</div></div>${monthly}`;
   }
   function renderBars() { const max=Math.max(...Object.values(totals)); $('#annBars').innerHTML=Object.entries(totals).map(([year,value])=>`<div class="bcol"><div class="bval">${(value/1000).toFixed(1)}M</div><div class="bbar ${year==='2026'?'fc':''}" style="height:${Math.round(value/max*100)}%"></div><div class="blab">${year}${year==='2026'?'<span class="fcbadge">전망</span>':''}</div></div>`).join(''); $('#annNote').innerHTML='단위 백만 명 · 2023–2025: KTO 공식 통계 참조 · 2026: 운영용 전망 참고치(추정, 기준일 2026-08-11)'; }
   function renderQuarterBars() {
@@ -235,7 +261,7 @@
   function marketValue(value) { return Number.isFinite(value) ? `${Math.round(value / 1000).toLocaleString()}천 명` : '공식 세부값 미공표'; }
   function renderInboundMarketMap() {
     let host=$('#inboundMarketMap');
-    if(!host){ $('#gdetail').insertAdjacentHTML('afterend','<section id="inboundMarketMap" class="card k-chart market-map" data-kind="Map"></section>'); host=$('#inboundMarketMap'); }
+    if(!host){ $('#gcrumb').insertAdjacentHTML('beforebegin','<section id="inboundMarketMap" class="card k-chart market-map" data-kind="Map"></section>'); host=$('#inboundMarketMap'); }
     const year=inboundMarketMap.years[state.marketYear] || inboundMarketMap.years[2025];
     const current=inboundMarketMap.markets.find(m=>m.code===state.marketCode) || inboundMarketMap.markets[0];
     const currentValue=year.values[current.code];
@@ -427,7 +453,17 @@
     $('#detail').innerHTML=`<h2>지역 상세</h2><div id="dtitle">${state.region||`${state.year}년 Q${state.q} · 전국`}</div><div id="dsub">${coverage==='uncollected'?'행사 데이터 미수집':`등록 행사 ${shown.length}건 · ${coverage==='complete'?'집계 완료':'집계 중'}`}</div>${shown.slice(0,18).map(r=>card(r)).join('')||`<div class="empty-note">${coverage==='uncollected'?'행사 데이터가 아직 수집되지 않았습니다.':'현재 등록된 행사가 0건입니다.'}</div>`}`; bindEvents($('#detail'));
     if(state.region) hydrateRegionMap(renderId,shown,state.region,coverage); else hydrateNationalMap(renderId,qrows,coverage);
   }
+  function positionQuarterControls() {
+    const controls=$('#segQ'), oldNav=controls.parentElement, title=$('#chartTitle');
+    const chart=title.closest('.card'), heading=document.createElement('div');
+    chart.classList.add('quarter-chart-card');
+    heading.className='quarter-chart-head';
+    title.before(heading);
+    heading.append(title,controls);
+    oldNav.remove();
+  }
   function init() {
+    positionQuarterControls();
     const count=domestic().length, excluded=rows.length-count; const ready=Array.isArray(window.MASTER_EVENT_ROWS) && rows.length>0;
     $('#homeEventCount').textContent=ready?`${count} events`:'unavailable';
     const years=availableDomesticYears(),yearLabel=years.length>1?`${years[0]}–${years.at(-1)}`:String(years[0]);
@@ -435,7 +471,8 @@
     document.querySelectorAll('.dataStatus').forEach(el=>el.textContent=ready?`Master Event List bundle 연결됨 · 국내 자료 ${count}건 · ${excluded}건 제외(일정/도시/권역 기준)`:'Master Event List bundle을 불러오지 못했습니다');
     ['gateG','gateD'].forEach(id=>{const el=$('#'+id);el.setAttribute('role','button');el.setAttribute('tabindex','0');});
     activate($('#gateG'),()=>show('global')); activate($('#gateD'),()=>show('domestic')); $('#backHome1').onclick=()=>show('home'); $('#backHome2').onclick=()=>show('home'); $('#eventModalBackdrop').onclick=()=>$('#eventModal').classList.remove('show'); $('#eventModalClose').onclick=()=>$('#eventModal').classList.remove('show'); document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#eventModal').classList.remove('show');});
-    loadFx().then(()=>{ if(state.view==='global') renderGlobal(); });
+    loadFx().then(()=>{ if(state.view==='global') renderFx(); });
+    loadMonthlyInbound().then(()=>{ if(state.view==='global') renderFx(); });
   }
   function boot() {
     if(!cityConfig) {
