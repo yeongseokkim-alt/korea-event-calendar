@@ -21,6 +21,13 @@
   const cityReturnStyle = document.createElement('style');
   cityReturnStyle.textContent = `#detail{position:relative}.city-return{position:absolute;top:14px;right:15px;z-index:2;margin:0}.city-return .back{display:inline-flex;align-items:center;min-height:32px;padding:7px 11px;border:1px solid #222D47;border-radius:8px;background:#222D47;color:#fff;font-family:var(--font-agoda-he);font-size:10.5px;box-shadow:0 4px 10px rgba(34,45,71,.14)}.city-return .back:hover{border-color:#34415D;background:#34415D;transform:translateY(-1px)}.city-return .back:focus-visible{outline:3px solid rgba(160,92,139,.35);outline-offset:3px}@media(max-width:560px){.city-return{position:static;margin:10px 0 12px}.city-return .back{width:100%;justify-content:center}}`;
   document.head.appendChild(cityReturnStyle);
+  const mapMarkerStyle = document.createElement('style');
+  mapMarkerStyle.textContent = `#map .rg:hover,#map .rg.map-hover,#map .rg:focus-visible{fill:#D7E5FF;stroke:#344B8F;stroke-width:2.4;filter:drop-shadow(0 2px 5px rgba(52,75,143,.22));outline:none}#map .rg{transition:fill .16s ease,stroke .16s ease,filter .16s ease}#map .marker-pin{fill:#1769B0;stroke:#fff;stroke-width:2;stroke-linejoin:round;filter:drop-shadow(0 2px 3px rgba(34,45,71,.20));transition:fill .16s ease,filter .16s ease}#map .marker-pin-number{fill:#fff;font-family:var(--font-agoda-he);font-size:10px;font-weight:800;text-anchor:middle;pointer-events:none}#map .marker-label-bg{fill:#fff;stroke:#C5D0E4;stroke-width:1;opacity:.98;filter:drop-shadow(0 1px 1px rgba(34,45,71,.10));pointer-events:all}#map .marker-label-text{fill:#222D47;font-family:var(--font-agoda-he);font-size:9px;font-weight:800;text-anchor:middle;pointer-events:none}#map .bub.is-empty .marker-pin{fill:#AEB9C7}#map .bub.is-empty .marker-pin-number{fill:#334155}#map .bub:hover .marker-pin,#map .bub:focus-visible .marker-pin{fill:#A05C8B;filter:drop-shadow(0 3px 6px rgba(160,92,139,.32))}.marker-leader{fill:none;stroke:#5A6FD0;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:4 3;opacity:1;pointer-events:none}.leader-origin{fill:#fff;stroke:#5A6FD0;stroke-width:2;pointer-events:none}.leader-end{fill:#5A6FD0;pointer-events:none}.bub.is-detached .marker-pin{filter:drop-shadow(0 2px 3px rgba(34,45,71,.22))}.bub.is-detached .bublbl{font-size:10.5px}.bub:focus-visible{outline:none}`;
+  document.head.appendChild(mapMarkerStyle);
+  const eventCountStyle = document.createElement('style');
+  eventCountStyle.textContent = `#domesticYear{min-height:31px;border:1px solid var(--line);border-radius:7px;background:var(--ink2);color:#222D47;padding:6px 9px;font-family:var(--font-agoda-rg);font-size:10.5px;cursor:pointer}#domesticYear:focus-visible{outline:3px solid rgba(160,92,139,.35);outline-offset:2px}#map .count-pin .marker-pin-number,#map .count-pin .bubn{fill:#222D47}#map .count-pin[data-count-band="very"] .marker-pin{fill:#CF9418}#map .count-pin[data-count-band="high"] .marker-pin{fill:#E8BD38}#map .count-pin[data-count-band="normal"] .marker-pin{fill:#F2D56A}#map .count-pin[data-count-band="zero"] .marker-pin{fill:#F5EFD9;stroke:#98A5B3}#map .count-pin[data-count-band="unknown"] .marker-pin{fill:#AEB9C7;stroke:#7C8997}#map .count-pin:hover .marker-pin,#map .count-pin:focus-visible .marker-pin{stroke:#344B8F;stroke-width:3;filter:drop-shadow(0 3px 6px rgba(52,75,143,.3))}.count-legend{align-items:center}.count-legend .count-legend-title{flex-basis:100%;text-align:center;font-family:var(--font-agoda-he);font-size:10px;color:#222D47;font-weight:700}.count-legend .count-legend-status{flex-basis:100%;text-align:center;font-size:9px;color:#66736A}.count-legend i{width:11px;height:11px;border:1px solid #98A5B3}.count-legend .count-unknown i{background:#AEB9C7}.count-legend .count-unknown{color:#526070}`;
+  eventCountStyle.textContent += `.count-legend{gap:8px 12px;font-size:10.5px;color:#526070}.count-legend .count-legend-title{font-size:11px}.count-legend .count-legend-status{font-size:9.5px}`;
+  document.head.appendChild(eventCountStyle);
   const marketMapStyle = document.createElement('style');
   marketMapStyle.textContent = `.market-map{margin-top:18px}.market-map .market-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}.market-map .market-top h2{margin-bottom:3px}.market-map .market-lead{font-size:11px;color:#334155;line-height:1.55}.market-map .market-year{display:flex;gap:5px;flex-wrap:wrap}.market-map .market-year button{border:1px solid var(--line);background:rgba(123,141,216,.13);color:#334155;border-radius:999px;padding:5px 8px;font-family:var(--font-agoda-rg);font-size:9px;cursor:pointer}.market-map .market-year button.on{background:rgba(160,92,139,.2);border-color:#A05C8B;color:#222D47;font-weight:700}.market-map .market-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(220px,.65fr);gap:14px;align-items:stretch}.market-world{background:#F7F8F6;border:1px solid var(--line);border-radius:12px;padding:10px;min-height:250px}.market-world svg{max-height:none;background:transparent;border-radius:8px}.market-land{fill:#D7EFFF;stroke:#BFCFBE;stroke-width:1}.market-dot{fill:#C94A63;stroke:#fff;stroke-width:3;cursor:pointer}.market-dot.sel{fill:#A05C8B;stroke:#222D47;stroke-width:3.5}.market-label{font-family:var(--font-agoda-rg);fill:#222D47;font-size:13px;font-weight:700;text-anchor:middle;pointer-events:none}.market-number{font-family:var(--font-agoda-rg);fill:#334155;font-size:10px;text-anchor:middle;pointer-events:none}.market-side{background:rgba(123,141,216,.12);border:1px solid var(--line);border-radius:12px;padding:14px}.market-side h3{font-family:var(--font-agoda-he);font-size:20px;margin:2px 0 4px;color:#222D47}.market-period{font-family:var(--font-agoda-rg);font-size:10px;color:#66736A}.market-value{font-family:var(--font-agoda-he);font-size:28px;color:#C94A63;margin:16px 0 5px}.market-note{font-size:10.5px;color:#334155;line-height:1.6;margin-top:10px}.market-series{margin-top:14px;border-top:1px solid var(--line);padding-top:9px}.market-series div{display:flex;justify-content:space-between;gap:10px;padding:4px 0;font-family:var(--font-agoda-rg);font-size:10px;color:#334155}.market-series b{color:#222D47}.market-source{margin-top:11px;font-family:var(--font-agoda-rg);font-size:9px;line-height:1.6;color:#66736A}.market-source a{color:#5A6FD0}.market-unavailable{font-size:11px;color:#66736A;text-align:center;padding:12px}@media(max-width:760px){.market-map .market-top{display:block}.market-map .market-year{margin-top:10px}.market-map .market-grid{grid-template-columns:1fr}.market-world{min-height:210px}}`;
   document.head.appendChild(marketMapStyle);
@@ -29,7 +36,7 @@
   document.head.appendChild(marketBoardStyle);
 
   const $ = (s) => document.querySelector(s);
-  const APP_REVISION = '2026.08.12';
+  const APP_REVISION = '2026.09.29';
   const revisionStamp = document.createElement('div');
   revisionStamp.className = 'revision-stamp';
   revisionStamp.innerHTML = `LAST UPDATED · <b>${APP_REVISION}</b>`;
@@ -38,19 +45,13 @@
   trendFooter.className = 'ota-trend-footer';
   trendFooter.innerHTML = `<div><div class="ota-trend-footer__eyebrow">Partner insights</div><div class="ota-trend-footer__copy">글로벌 OTA·여행 시장 인사이트와 파트너 운영 팁을 확인하세요.</div></div><a class="ota-trend-link" href="https://partnerhub.agoda.com/ko-kr/news-insights/" target="_blank" rel="noopener">OTA 최신 트렌드 ↗</a>`;
   document.querySelector('.shell').appendChild(trendFooter);
+  const mapCredit = document.createElement('div');
+  mapCredit.style.cssText = 'margin-top:8px;font-size:9px;line-height:1.5;color:#66736A';
+  mapCredit.innerHTML = `지도 도형: <a href="https://www.npmjs.com/package/@svg-maps/south-korea" target="_blank" rel="noopener">@svg-maps/south-korea · MapSVG 기반</a> (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>), 인터랙션·핀 표시는 본 캘린더에서 추가`;
+  $('#domestic .foot').appendChild(mapCredit);
   const rows = Array.isArray(window.MASTER_EVENT_ROWS) ? window.MASTER_EVENT_ROWS : [];
   const regions = ['서울','인천','경기','강원','충북','충남','세종','대전','전북','전남','광주','경북','대구','경남','울산','부산','제주'];
-  const cityToRegion = {
-    서울:'서울',인천:'인천',부산:'부산',대구:'대구',광주:'광주',대전:'대전',울산:'울산',세종:'세종',제주:'제주',
-    수원:'경기',고양:'경기',용인:'경기',성남:'경기',화성:'경기',평택:'경기',김포:'경기',파주:'경기',가평:'경기',의정부:'경기',
-    춘천:'강원',강릉:'강원',속초:'강원',원주:'강원',평창:'강원',횡성:'강원',정선:'강원',양양:'강원',인제:'강원',
-    청주:'충북',충주:'충북',제천:'충북',괴산:'충북',음성:'충북',영동:'충북',단양:'충북',진천:'충북',
-    천안:'충남',공주:'충남',보령:'충남',아산:'충남',서산:'충남',당진:'충남',청양:'충남',태안:'충남',계룡:'충남',
-    전주:'전북',군산:'전북',익산:'전북',남원:'전북',김제:'전북',정읍:'전북',무주:'전북',고창:'전북',부안:'전북',
-    여수:'전남',순천:'전남',목포:'전남',나주:'전남',광양:'전남',담양:'전남',해남:'전남',완도:'전남',진도:'전남',
-    포항:'경북',경주:'경북',안동:'경북',구미:'경북',김천:'경북',영주:'경북',울진:'경북',봉화:'경북',상주:'경북',영덕:'경북',
-    창원:'경남',진주:'경남',통영:'경남',거제:'경남',김해:'경남',양산:'경남',사천:'경남',밀양:'경남',합천:'경남',거창:'경남'
-  };
+  let cityConfig = window.CITY_NORMALIZATION_CONFIG || null;
   const regionPos = {인천:[92,105],서울:[158,101],경기:[188,122],강원:[284,108],충남:[126,190],세종:[166,189],충북:[207,181],대전:[187,211],전북:[174,253],전남:[136,338],광주:[157,313],경북:[282,215],대구:[272,257],경남:[264,316],울산:[314,295],부산:[302,340],제주:[132,455]};
   const shape = 'M82,92 L101,70 L124,56 L150,49 L177,52 L197,45 L219,47 L244,55 L265,68 L278,84 L283,105 L279,126 L272,148 L272,171 L280,192 L283,216 L278,241 L273,266 L266,291 L256,316 L243,340 L228,361 L208,377 L185,389 L165,402 L150,422 L136,442 L119,452 L101,449 L92,432 L92,406 L85,382 L73,361 L63,338 L57,313 L52,286 L54,259 L58,232 L59,205 L55,181 L53,154 L58,130 L68,111 Z';
   const inbound = [
@@ -90,25 +91,80 @@
       2025:{label:'2025 확정',period:'1–12월',total:18936562,values:{cn:5480969,jp:3653137,tw:1891414,us:1483240,hk:623149}}
     }
   };
-  const APP_YEAR = 2026;
-  const state = {view:'home',q:4,region:null,city:null,date:'',eventId:'',globalKey:'',marketYear:2025,marketCode:'cn',fx:{rate:1421.16,chg:-0.51,asOf:'2026-08-11',note:'USD/KRW 변동 참고 — 출발국 통화별 체감 환율·항공료·예약 추이를 함께 확인하세요.',source:'BOK ECOS',status:'fallback',lastSuccessfulAt:'2026-08-11 13:20 KST'}};
+  const DEFAULT_YEAR = 2026;
+  const state = {view:'home',year:DEFAULT_YEAR,q:4,region:null,city:null,date:'',eventId:'',globalKey:'',marketYear:2025,marketCode:'cn',fx:{rate:1421.16,chg:-0.51,asOf:'2026-08-11',note:'USD/KRW 변동 참고 — 출발국 통화별 체감 환율·항공료·예약 추이를 함께 확인하세요.',source:'BOK ECOS',status:'fallback',lastSuccessfulAt:'2026-08-11 13:20 KST'}};
+  const mapRuntime = { renderId:0, svgPromise:null, diagnostics:[] };
 
   const text = (v) => String(v || '').trim();
   const esc = (v) => text(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const city = (r) => text(r['개최 도시']).replace(/(특별자치도|광역시|특별시|시|군|구)$/,'');
+  const cityInfo = (r) => cityConfig.normalize(text(r['개최 도시']), text(r['영향 권역']));
+  const city = (r) => cityInfo(r).label;
+  const cityKey = (r) => cityInfo(r).key;
   function region(r) {
     const source = text(r['영향 권역']).split(/[·,\\/]/)[0].trim().replace(/(특별자치도|광역시|특별시|도)$/,'');
-    return regions.includes(source) ? source : (cityToRegion[city(r)] || regions.find(n => city(r).includes(n)) || '기타');
+    const normalized = cityInfo(r);
+    // Event-count pins describe the venue, not the broader demand catchment.
+    return regions.includes(normalized.region) ? normalized.region : (regions.includes(source) ? source : '기타');
   }
   function month(r) { const m = text(r['시작일']).match(/(?:\d{4}[-./])?(\d{1,2})[-./]\d{1,2}/); return m ? +m[1] : 0; }
-  function endMonth(r) { const m = text(r['종료일']).match(/(?:\d{4}[-./])?(\d{1,2})[-./]\d{1,2}/); return m ? +m[1] : month(r); }
-  const hasValidDate = (r) => /^2026-\d{2}-\d{2}$/.test(dateKey(r['시작일']));
-  const domestic = () => rows.filter(r => hasValidDate(r) && city(r) && region(r) !== '기타');
+  function strictDateKey(value) {
+    const raw=text(value); if(!/^\d{4}[-./]\d{1,2}[-./]\d{1,2}$/.test(raw)) return '';
+    const key=dateKey(raw), year=+key.slice(0,4), month=+key.slice(5,7), day=+key.slice(8,10);
+    const date=new Date(Date.UTC(year,month-1,day));
+    return date.getUTCFullYear()===year && date.getUTCMonth()+1===month && date.getUTCDate()===day ? key : '';
+  }
+  const hasValidDate = (r) => {
+    const first=strictDateKey(r['시작일']), last=text(r['종료일']) ? strictDateKey(r['종료일']) : first;
+    return Boolean(first && last && last>=first);
+  };
+  let domesticCache;
+  const domestic = () => domesticCache ??= rows.filter(r => hasValidDate(r) && cityKey(r) && region(r) !== '기타');
   const quarterMonths = (q) => [q * 3 - 2, q * 3 - 1, q * 3];
-  const inQuarter = (r,q=state.q) => month(r) <= q * 3 && endMonth(r) >= q * 3 - 2;
   const dateKey = (v) => { const m=text(v).match(/(\d{4})[-./](\d{1,2})[-./](\d{1,2})/); return m ? `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}` : ''; };
   const start = (r) => dateKey(r['시작일']);
   const end = (r) => dateKey(r['종료일']) || start(r);
+  const quarterBounds = (year,q) => [`${year}-${String(q*3-2).padStart(2,'0')}-01`,new Date(Date.UTC(year,q*3,0)).toISOString().slice(0,10)];
+  const inQuarter = (r,q=state.q,year=state.year) => {const [first,last]=quarterBounds(year,q);return start(r)<=last && end(r)>=first;};
+  function availableDomesticYears() {
+    const years=new Set([DEFAULT_YEAR]);
+    domestic().forEach(r=>{const first=+start(r).slice(0,4),last=+end(r).slice(0,4);for(let year=first;year<=Math.min(last,first+10);year++) years.add(year);});
+    Object.keys(quarterCoverageOverrides).forEach(key=>years.add(+key.slice(0,4)));
+    return [...years].sort((a,b)=>a-b);
+  }
+  function quarterOccurrences(year=state.year,q=state.q) {
+    const unique=new Map();
+    domestic().filter(r=>inQuarter(r,q,year)).forEach(r=>{
+      const id=text(r['Event ID']) || `${text(r['행사명'])}|${start(r)}|${end(r)}`;
+      const key=`${id}\u001f${cityKey(r)}`;
+      if(!unique.has(key)) unique.set(key,r);
+    });
+    return [...unique.values()];
+  }
+  // Editors may set a verified quarter to 'complete'. New quarters with data
+  // default to 'in_progress'; no rows never silently means no events occurred.
+  const quarterCoverageOverrides = Object.freeze({});
+  const quarterCoverage = (year,q,quarterRows=quarterOccurrences(year,q)) => quarterCoverageOverrides[`${year}-Q${q}`] || (quarterRows.length?'in_progress':'uncollected');
+  const countBands = Object.freeze({very:{fill:'#CF9418',label:'행사 매우 많음'},high:{fill:'#E8BD38',label:'행사 많음'},normal:{fill:'#F2D56A',label:'행사 등록'},zero:{fill:'#F5EFD9',label:'등록 0건'},unknown:{fill:'#AEB9C7',label:'데이터 미수집'}});
+  function countBand(count,scope,coverage) {
+    if(coverage==='uncollected') return 'unknown';
+    if(count===0) return 'zero';
+    return count>=(scope==='province'?10:5)?'very':count>=(scope==='province'?4:3)?'high':'normal';
+  }
+  function renderDomesticYearControl() {
+    let control=$('#domesticYear');
+    if(!control){control=document.createElement('select');control.id='domesticYear';control.setAttribute('aria-label','국내 행사 연도');$('#segMonth').before(control);}
+    const years=availableDomesticYears();
+    if(!years.includes(state.year)) state.year=DEFAULT_YEAR;
+    control.innerHTML=years.map(year=>`<option value="${year}">${year}년</option>`).join('');
+    control.value=String(state.year);
+    control.onchange=()=>{state.year=+control.value;state.region=null;state.city=null;state.date='';state.eventId='';renderDomestic();};
+  }
+  function renderCountLegend(coverage,scope) {
+    const province=scope==='province', ranges=province?['10건 이상','4–9건','1–3건']:['5건 이상','3–4건','1–2건'];
+    const status=coverage==='uncollected'?'이 분기는 데이터 미수집 · 0건으로 해석하지 마세요':coverage==='complete'?'집계 완료 · 등록 행사 수 기준':'집계 중 · 현재 등록된 행사 수 기준';
+    const legend=$('#domestic .legend'); legend.classList.add('count-legend');
+    legend.innerHTML=`<div class="count-legend-title">${state.year}년 Q${state.q} · ${province?'시·도':'시·군'}별 등록 행사 수</div>${['very','high','normal'].map((band,i)=>`<span><i style="background:${countBands[band].fill}"></i>${countBands[band].label} ${ranges[i]}</span>`).join('')}<span><i style="background:${countBands.zero.fill}"></i>등록 0건</span><span class="count-unknown"><i></i>데이터 미수집 —</span><div class="count-legend-status">${status}${province?'':' · 시·군은 등록된 도시만 핀 표시'}</div>`;
+  }
   const includesDate = (r,key) => start(r) <= key && end(r) >= key;
   const eventById = (id) => rows.find(r => text(r['Event ID']) === id);
   const displayDate = (v) => { const k=dateKey(v); return k ? `${k.slice(5,7)}/${k.slice(8,10)}` : (text(v) || '일정 확인 중'); };
@@ -193,43 +249,208 @@
     host.querySelectorAll('[data-market]').forEach(el=>activate(el,()=>{state.marketCode=el.dataset.market;renderInboundMarketMap();}));
   }
 
-  function nationalMap(data) { return `<svg viewBox="0 0 420 500" aria-label="대한민국 시도 지도"><path class="silhouette" d="${shape}"/>${regions.map(n=>{const count=data.filter(r=>region(r)===n).length,p=regionPos[n]||[210,220];return `<g class="bub" data-region="${n}" role="button" tabindex="0"><circle cx="${p[0]}" cy="${p[1]}" r="${count?18:10}" fill="${count?'#C94A63':'#D7EFFF'}"/><text class="bubn" x="${p[0]}" y="${p[1]+4}">${count||''}</text><text class="bublbl" x="${p[0]}" y="${p[1]+30}">${n}</text></g>`;}).join('')}</svg>`; }
-  function regionMap(data, name) {
-    const cities=[...new Set(data.map(city))].sort(); const cols=Math.max(2,Math.ceil(Math.sqrt(cities.length||1)));
-    return `<svg viewBox="0 0 420 500" aria-label="${name} 시군 지도"><path class="silhouette" d="${shape}"/><path class="rg focus" d="${shape}"/>${cities.map((c,i)=>{const x=120+(i%cols)*(180/Math.max(1,cols-1)),y=180+Math.floor(i/cols)*62,count=data.filter(r=>city(r)===c).length;return `<g class="bub" data-city="${esc(c)}" role="button" tabindex="0"><circle cx="${x}" cy="${y}" r="22" fill="#A05C8B"/><text class="bubn" x="${x}" y="${y+4}">${count}</text><text class="bublbl" x="${x}" y="${y+36}">${esc(c)}</text></g>`;}).join('')}</svg>`; }
+  // Keep one visual language: every province uses the same pin and a label
+  // immediately beneath it. These are only in-shape anchor refinements where
+  // a geographic envelope would otherwise sit on top of a neighbouring city.
+  const provinceMarkerLayouts = {
+    // Gyeonggi has room east of Seoul; avoid making the two pins look stacked.
+    '경기': {dx:52,dy:34},
+    '인천': {dx:-8},
+    '충남': {dx:-12,dy:10},
+    '세종': {dx:-5,dy:-12},
+    '대전': {dx:5,dy:12},
+    '전남': {dx:-8,dy:12},
+    '울산': {dx:6,dy:-5},
+    '부산': {dx:-6,dy:6},
+    // Raise Jeju's pin enough to keep the standard below-pin label in view.
+    '제주': {dy:-12}
+  };
+  const compactProvincePins = new Set(['서울','인천','세종','대전','대구','울산','부산','광주']);
+  const NATIONAL_PIN_SCALE=.70;
+  function nationalMap(data,coverage) { return `<svg viewBox="0 0 420 500" aria-label="대한민국 시도 지도"><path class="silhouette" d="${shape}"/>${regions.map(n=>{const count=data.filter(r=>region(r)===n).length,p=regionPos[n]||[210,220],band=countBand(count,'province',coverage),display=band==='unknown'?'–':count;return `<g class="bub count-pin" data-count-band="${band}" data-region-control="${n}" role="button" tabindex="0" aria-label="${n} ${band==='unknown'?'데이터 미수집':`등록 행사 ${count}건`}"><circle cx="${p[0]}" cy="${p[1]}" r="18" fill="${countBands[band].fill}" stroke="#8795A3"/><text class="bubn" x="${p[0]}" y="${p[1]+4}" fill="#222D47">${display}</text><text class="bublbl" x="${p[0]}" y="${p[1]+30}">${n}</text></g>`;}).join('')}</svg>`; }
+  function regionMap(data, name,coverage) {
+    const cities=[...new Map(data.map(r=>[cityKey(r),city(r)])).entries()].sort((a,b)=>a[1].localeCompare(b[1],'ko')); const cols=Math.max(2,Math.ceil(Math.sqrt(cities.length||1)));
+    return `<svg viewBox="0 0 420 500" aria-label="${name} 시군 지도"><path class="silhouette" d="${shape}"/><path class="rg focus" d="${shape}"/>${cities.map(([key,label],i)=>{const x=120+(i%cols)*(180/Math.max(1,cols-1)),y=180+Math.floor(i/cols)*62,count=data.filter(r=>cityKey(r)===key).length,band=countBand(count,'city',coverage);return `<g class="bub count-pin" data-count-band="${band}" data-city="${esc(key)}" role="button" tabindex="0" aria-label="${esc(label)} 등록 행사 ${count}건"><circle cx="${x}" cy="${y}" r="22" fill="${countBands[band].fill}" stroke="#8795A3"/><text class="bubn" x="${x}" y="${y+4}" fill="#222D47">${count}</text><text class="bublbl" x="${x}" y="${y+36}">${esc(label)}</text></g>`;}).join('')}</svg>`; }
+  function mapDiagnostic(kind, error) {
+    const entry={at:new Date().toISOString(),kind,message:error instanceof Error?error.message:String(error)};
+    mapRuntime.diagnostics.push(entry); if(mapRuntime.diagnostics.length>20) mapRuntime.diagnostics.shift();
+    window.__EVENT_CALENDAR_MAP_DIAGNOSTICS__=mapRuntime.diagnostics;
+    console.warn('[Event Calendar map]', entry);
+  }
+  function mapIsCurrent(renderId, expectedRegion) {
+    return renderId===mapRuntime.renderId && state.view==='domestic' && !state.city && state.region===expectedRegion;
+  }
+  function loadProvinceSvg() {
+    if (!mapRuntime.svgPromise) {
+      mapRuntime.svgPromise=fetch('./korea-provinces.svg',{cache:'force-cache'}).then(res=>{
+        if(!res.ok) throw new Error(`SVG load failed: HTTP ${res.status}`);
+        return res.text();
+      }).catch(error=>{ mapRuntime.svgPromise=null; throw error; });
+    }
+    return mapRuntime.svgPromise;
+  }
+  function bindMapControls(host) {
+    host.querySelectorAll('path[data-region]').forEach(path=>{
+      path.addEventListener('pointerenter',()=>path.classList.add('map-hover'));
+      path.addEventListener('pointerleave',()=>path.classList.remove('map-hover'));
+    });
+    host.querySelectorAll('[data-region-control]').forEach(el=>{
+      const regionName=el.dataset.regionControl, path=host.querySelector(`path[data-region="${regionName}"]`);
+      const setHover=active=>path?.classList.toggle('map-hover',active);
+      el.addEventListener('pointerenter',()=>setHover(true)); el.addEventListener('pointerleave',()=>setHover(false));
+      el.addEventListener('focus',()=>setHover(true)); el.addEventListener('blur',()=>setHover(false));
+      activate(el,()=>{state.region=regionName;state.city=null;state.date='';state.eventId='';renderDomestic();});
+    });
+    host.querySelectorAll('[data-city]').forEach(el=>activate(el,()=>{state.city=el.dataset.city;state.date='';state.eventId='';renderDomestic();}));
+  }
+  function sourcePaths(svgText) {
+    const doc=new DOMParser().parseFromString(svgText,'image/svg+xml');
+    if(doc.querySelector('parsererror')) throw new Error('SVG parse failed');
+    const bySvgId=Object.entries(cityConfig.provinceSvgIds).reduce((result,[regionName,svgId])=>{result[svgId]=regionName;return result;},{});
+    const paths=[...doc.querySelectorAll('path[id]')].filter(path=>bySvgId[path.id]).map(path=>{
+      const regionName=bySvgId[path.id];
+      path.removeAttribute('style'); path.setAttribute('class','rg'); path.setAttribute('data-region',regionName);
+      path.removeAttribute('role'); path.removeAttribute('tabindex'); path.setAttribute('aria-label',`${regionName} 지도`);
+      return path.outerHTML;
+    });
+    if(paths.length!==regions.length) throw new Error(`SVG region count mismatch: expected ${regions.length}, received ${paths.length}`);
+    return {viewBox:doc.documentElement.getAttribute('viewBox')||'0 0 524 631',paths:paths.join('')};
+  }
+  function pinMarker(x,y,displayCount,scale=1) {
+    return `<g class="marker-pin-wrap" transform="translate(${x} ${y}) scale(${scale})"><path class="marker-pin" d="M0 22C-2 15-16 4-16-8A16 16 0 1 1 16-8C16 4 2 15 0 22Z"/><text class="marker-pin-number" x="0" y="-4">${displayCount}</text></g>`;
+  }
+  function markerLabel(x,y,label) {
+    const width=Math.max(28,[...label].length*11+12);
+    return `<g transform="translate(${x} ${y})"><rect class="marker-label-bg" x="${-width/2}" y="-10" width="${width}" height="18" rx="8"/><text class="marker-label-text" x="0" y="3">${label}</text></g>`;
+  }
+  function cityMarkerLabel(x,y,label,scale) {
+    const width=Math.max(28,[...label].length*11+12);
+    return `<g transform="translate(${x} ${y}) scale(${scale})"><rect class="marker-label-bg" x="${-width/2}" y="28" width="${width}" height="18" rx="8"/><text class="marker-label-text" x="0" y="41">${label}</text></g>`;
+  }
+  function nationalMarkers(host,data,coverage) {
+    // Compact jurisdictions are painted last so their true map positions are
+    // never hidden by a nearby larger province pin.
+    return [...regions].sort((a,b)=>Number(compactProvincePins.has(a))-Number(compactProvincePins.has(b))).map(name=>{
+      const path=host.querySelector(`path[data-region="${name}"]`); if(!path) return '';
+      const box=path.getBBox(), anchorX=box.x+box.width/2, anchorY=box.y+box.height/2, layout=provinceMarkerLayouts[name]||{};
+      const x=anchorX+(layout.dx||0), y=anchorY+(layout.dy||0), labelX=x+(layout.labelDx||0), rawLabelDy=layout.labelDy??10, labelY=y+(rawLabelDy<0?rawLabelDy-10:rawLabelDy+12), count=data.filter(r=>region(r)===name).length, band=countBand(count,'province',coverage), scale=NATIONAL_PIN_SCALE;
+      return `<g class="bub count-pin" data-count-band="${band}" data-region-control="${name}" role="button" tabindex="0" aria-label="${name} ${band==='unknown'?'데이터 미수집':`등록 행사 ${count}건`}">${pinMarker(x,y,band==='unknown'?'–':count,scale)}${markerLabel(labelX,labelY,name)}</g>`;
+    }).join('');
+  }
+  function cityMarkers(host,data,regionName,coverage) {
+    const path=host.querySelector(`path[data-region="${regionName}"]`); if(!path) return '';
+    const box=path.getBBox(), cities=[...new Map(data.map(r=>[cityKey(r),city(r)])).entries()].sort((a,b)=>a[1].localeCompare(b[1],'ko'));
+    // A Seoul-sized regional view has a much tighter SVG viewBox than a
+    // province such as Gangwon. Scale the entire pin/label pair to the actual
+    // geometry so city details remain legible instead of filling the map.
+    const cityPinScale=Math.min(.66,Math.max(.16,Math.min(box.width,box.height)/230));
+    const cols=Math.max(2,Math.ceil(Math.sqrt(cities.length||1))), rowsNeeded=Math.max(1,Math.ceil(cities.length/cols));
+    return cities.map(([key,label],index)=>{
+      const x=box.x+box.width*((index%cols+1)/(cols+1)), y=box.y+box.height*(.20+(.58*Math.floor(index/cols)/Math.max(1,rowsNeeded-1))), count=data.filter(r=>cityKey(r)===key).length, band=countBand(count,'city',coverage);
+      return `<g class="bub count-pin" data-count-band="${band}" data-city="${esc(key)}" role="button" tabindex="0" aria-label="${esc(label)} 등록 행사 ${count}건">${pinMarker(x,y,count,cityPinScale)}${cityMarkerLabel(x,y,esc(label),cityPinScale)}</g>`;
+    }).join('');
+  }
+  async function hydrateNationalMap(renderId, data,coverage) {
+    try {
+      if(new URLSearchParams(window.location.search).has('mapFallbackTest')) throw new Error('Forced SVG fallback test');
+      const source=await loadProvinceSvg(); if(!mapIsCurrent(renderId,null)) return;
+      const map=$('#map'), parsed=sourcePaths(source); map.setAttribute('viewBox',parsed.viewBox); map.setAttribute('aria-label','대한민국 시도 지도');
+      map.innerHTML=parsed.paths; map.insertAdjacentHTML('beforeend',nationalMarkers(map,data,coverage));
+      map.closest('.mapbox').dataset.mapStatus='ready'; map.dataset.mapSource='cc-by-4.0';
+      bindMapControls(map);
+    } catch(error) {
+      if(!mapIsCurrent(renderId,null)) return;
+      $('#map').closest('.mapbox').dataset.mapStatus='fallback'; mapDiagnostic('national-svg-fallback',error);
+    }
+  }
+  async function hydrateRegionMap(renderId, data, regionName,coverage) {
+    try {
+      if(new URLSearchParams(window.location.search).has('mapFallbackTest')) throw new Error('Forced SVG fallback test');
+      const source=await loadProvinceSvg(); if(!mapIsCurrent(renderId,regionName)) return;
+      const map=$('#map'), parsed=sourcePaths(source), svgId=cityConfig.provinceSvgIds[regionName], doc=new DOMParser().parseFromString(source,'image/svg+xml'), selected=doc.getElementById(svgId);
+      if(!selected) throw new Error(`SVG region missing: ${regionName}`);
+      const d=selected.getAttribute('d'); map.setAttribute('viewBox',parsed.viewBox); map.setAttribute('aria-label',`${regionName} 시군 지도`);
+      map.innerHTML=`<defs><clipPath id="region-clip"><path d="${d}"/></clipPath></defs><path class="rg focus" data-region="${regionName}" d="${d}" aria-label="${regionName} 지도"/>`;
+      // A regional view must use the province bounds, not the full national SVG.
+      // The padding protects the outline and the city markers at every screen size.
+      const focusBox=map.querySelector(`path[data-region="${regionName}"]`).getBBox();
+      const padX=Math.max(26,focusBox.width*.18), padY=Math.max(26,focusBox.height*.18);
+      map.setAttribute('viewBox',`${focusBox.x-padX} ${focusBox.y-padY} ${focusBox.width+padX*2} ${focusBox.height+padY*2}`);
+      // City markers may sit on a provincial edge. Do not clip their circles or
+      // labels to the outline; the padded regional viewBox keeps them visible.
+      map.insertAdjacentHTML('beforeend',`<g class="city-markers">${cityMarkers(map,data,regionName,coverage)}</g>`);
+      map.closest('.mapbox').dataset.mapStatus='ready'; map.dataset.mapSource='cc-by-4.0';
+      bindMapControls(map);
+    } catch(error) {
+      if(!mapIsCurrent(renderId,regionName)) return;
+      $('#map').closest('.mapbox').dataset.mapStatus='fallback'; mapDiagnostic('regional-svg-fallback',error);
+    }
+  }
   function monthCalendar(list, year, mon) {
     const first=new Date(year,mon-1,1),days=new Date(year,mon,0).getDate(); const cells=[];
     for(let i=0;i<first.getDay();i++) cells.push('<div class="day empty"></div>');
     for(let day=1;day<=days;day++){const key=`${year}-${String(mon).padStart(2,'0')}-${String(day).padStart(2,'0')}`,hits=list.filter(r=>includesDate(r,key)); cells.push(`<button class="day ${hits.length?'has':''} ${state.date===key?'sel':''}" ${hits.length?`data-date="${key}"`:''}><span class="dn">${day}</span>${hits.length?`<span class="dd">${hits.slice(0,3).map(()=>'<i class="dot hot"></i>').join('')}</span>`:''}</button>`);}
-    return `<section class="quarter-tile"><div class="month-head"><strong>${mon}월</strong><span>${list.filter(r=>month(r)===mon).length}건</span></div><div class="weekdays"><div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div></div><div class="days">${cells.join('')}</div></section>`;
+    const monthStart=`${year}-${String(mon).padStart(2,'0')}-01`,monthEnd=`${year}-${String(mon).padStart(2,'0')}-${String(days).padStart(2,'0')}`;
+    return `<section class="quarter-tile"><div class="month-head"><strong>${mon}월</strong><span>${list.filter(r=>start(r)<=monthEnd&&end(r)>=monthStart).length}건</span></div><div class="weekdays"><div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div></div><div class="days">${cells.join('')}</div></section>`;
+  }
+  function cityLabelForKey(key, list=domestic()) {
+    const match=list.find(r=>cityKey(r)===key); return match?city(match):String(key||'').replace('-', ' ');
+  }
+  function firstVisibleQuarterDate(list) {
+    if(!list.length) return '';
+    const quarterStart=quarterBounds(state.year,state.q)[0],first=[...list].sort((a,b)=>start(a).localeCompare(start(b)))[0];
+    return start(first)<quarterStart?quarterStart:start(first);
   }
   function renderCity() {
-    const list=domestic().filter(r=>region(r)===state.region&&city(r)===state.city), months=quarterMonths(state.q); if(!state.date) state.date=start(list.find(r=>inQuarter(r))||list[0]);
-    const chosen=list.filter(r=>includesDate(r,state.date)); if(!state.eventId && chosen[0]) state.eventId=text(chosen[0]['Event ID']); const current=eventById(state.eventId)||chosen[0]||list[0];
-    document.querySelector('.cols').classList.add('city-mode'); $('#maptitle').textContent=`${state.region} · ${state.city} 상세`; $('#backBtn').style.display='none'; $('#hint').textContent='날짜를 눌러 해당 날짜의 행사 정보를 확인하세요';
-    $('#detail').innerHTML=`<h2>지역 상세</h2><div id="dtitle">${esc(state.city)}</div><div id="dsub">${esc(state.region)} · Q${state.q} · ${months.map(m=>`${m}월`).join('–')}</div><div class="city-return"><button class="back" id="toRegion">← ${esc(state.region)} 시·군</button></div><div class="city-layout"><div class="city-main"><div class="month-strip"><div class="month-grid">${months.map(m=>monthCalendar(list,APP_YEAR,m)).join('')}</div></div></div><aside class="city-side"><div class="event-panel cardlike"><div class="label">선택 날짜</div><div class="pick-date">${state.date.replace(/-/g,'.')}</div><div class="pick-sub">${chosen.length}건의 행사가 연결되어 있어요</div><div class="event-list">${chosen.map(r=>card(r,text(r['Event ID'])===state.eventId)).join('')||'<div class="empty-note">행사 날짜를 선택하세요.</div>'}</div></div>${current?`<div class="event-detail"><div class="title">${esc(current['행사명'])}${adr(current)}</div><div class="sub">${esc(state.city)} · ${displayDate(current['시작일'])}–${displayDate(current['종료일'])}</div><div class="kv"><div class="k">수요 영향도</div><div class="v impact">${esc(impact(current))}</div><div class="k">규모 정보</div><div class="v">${esc(size(current))}</div><div class="k">일정</div><div class="v">${esc(text(current['시작일']))} ~ ${esc(text(current['종료일']))}</div></div></div>`:''}</aside></div>`;
+    const list=quarterOccurrences().filter(r=>region(r)===state.region&&cityKey(r)===state.city), months=quarterMonths(state.q), cityLabel=cityLabelForKey(state.city,list); if(!state.date) state.date=firstVisibleQuarterDate(list);
+    const chosen=list.filter(r=>includesDate(r,state.date)); if(!state.eventId && chosen[0]) state.eventId=text(chosen[0]['Event ID']); const current=list.find(r=>text(r['Event ID'])===state.eventId)||chosen[0]||list[0];
+    document.querySelector('.cols').classList.add('city-mode'); $('#maptitle').textContent=`${state.region} · ${cityLabel} 상세`; $('#backBtn').style.display='none'; $('#hint').textContent='날짜를 눌러 해당 날짜의 행사 정보를 확인하세요';
+    $('#detail').innerHTML=`<h2>지역 상세</h2><div id="dtitle">${esc(cityLabel)}</div><div id="dsub">${esc(state.region)} · ${state.year}년 Q${state.q} · ${months.map(m=>`${m}월`).join('–')}</div><div class="city-return"><button class="back" id="toRegion">← ${esc(state.region)} 시·군</button></div><div class="city-layout"><div class="city-main"><div class="month-strip"><div class="month-grid">${months.map(m=>monthCalendar(list,state.year,m)).join('')}</div></div></div><aside class="city-side"><div class="event-panel cardlike"><div class="label">선택 날짜</div><div class="pick-date">${state.date.replace(/-/g,'.')}</div><div class="pick-sub">${chosen.length}건의 행사가 연결되어 있어요</div><div class="event-list">${chosen.map(r=>card(r,text(r['Event ID'])===state.eventId)).join('')||'<div class="empty-note">행사 날짜를 선택하세요.</div>'}</div></div>${current?`<div class="event-detail"><div class="title">${esc(current['행사명'])}${adr(current)}</div><div class="sub">${esc(cityLabel)} · ${displayDate(current['시작일'])}–${displayDate(current['종료일'])}</div><div class="kv"><div class="k">수요 영향도</div><div class="v impact">${esc(impact(current))}</div><div class="k">규모 정보</div><div class="v">${esc(size(current))}</div><div class="k">일정</div><div class="v">${esc(text(current['시작일']))} ~ ${esc(text(current['종료일']))}</div></div></div>`:''}</aside></div>`;
     activate($('#toRegion'),()=>{state.city=null;state.date='';state.eventId='';renderDomestic();}); $('#detail').querySelectorAll('[data-date]').forEach(b=>activate(b,()=>{state.date=b.dataset.date;state.eventId='';renderCity();})); bindEvents($('#detail'));
   }
   function renderDomestic() {
+    const renderId=++mapRuntime.renderId;
     $('#home').style.display='none'; $('#global').style.display='none'; $('#domestic').style.display='block';
+    renderDomesticYearControl();
     $('#segMonth').innerHTML=[1,2,3,4].map(q=>`<button data-q="${q}" class="${q===state.q?'on':''}">Q${q}</button>`).join(''); $('#segMonth').querySelectorAll('button').forEach(b=>b.onclick=()=>{state.q=+b.dataset.q;state.region=null;state.city=null;state.date='';renderDomestic();});
+    const qrows=quarterOccurrences(),coverage=quarterCoverage(state.year,state.q,qrows);
+    $('#domestic .dataStatus').textContent=coverage==='uncollected'?`Master Event List bundle 연결됨 · ${state.year}년 Q${state.q} 행사 데이터 미수집`:`Master Event List bundle 연결됨 · ${state.year}년 Q${state.q} 등록 행사 ${qrows.length}건 · ${coverage==='complete'?'집계 완료':'집계 중'}`;
     if(state.city){ renderCity(); return; }
-    document.querySelector('.cols').classList.remove('city-mode'); const qrows=domestic().filter(r=>inQuarter(r)); const shown=state.region?qrows.filter(r=>region(r)===state.region):qrows;
-    $('#crumb').innerHTML=state.region?`전국 › <b>${state.region}</b>`:'전국'; $('#maptitle').textContent=state.region?`${state.region} · 시·군`:'대한민국 · 시·도'; $('#map').innerHTML=state.region?regionMap(shown,state.region):nationalMap(qrows);
-    $('#map').querySelectorAll('[data-region]').forEach(el=>activate(el,()=>{state.region=el.dataset.region;renderDomestic();})); $('#map').querySelectorAll('[data-city]').forEach(el=>activate(el,()=>{state.city=el.dataset.city;state.date='';state.eventId='';renderDomestic();}));
-    const pickerItems = state.region ? [...new Set(shown.map(city))].sort().map(c=>`<button class="back" data-city="${esc(c)}">${esc(c)} ${shown.filter(r=>city(r)===c).length}</button>`) : regions.map(n=>{const count=qrows.filter(r=>region(r)===n).length;return count?`<button class="back" data-region="${n}">${n} ${count}</button>`:''});
+    document.querySelector('.cols').classList.remove('city-mode'); const shown=state.region?qrows.filter(r=>region(r)===state.region):qrows;
+    $('#crumb').innerHTML=state.region?`${state.year}년 Q${state.q} · 전국 › <b>${state.region}</b>`:`${state.year}년 Q${state.q} · 전국`; $('#maptitle').textContent=state.region?`${state.region} · 시·군`:'대한민국 · 시·도'; $('#map').innerHTML=state.region?regionMap(shown,state.region,coverage):nationalMap(qrows,coverage);
+    renderCountLegend(coverage,state.region?'city':'province');
+    $('#map').closest('.mapbox').dataset.mapStatus='loading'; bindMapControls($('#map'));
+    const pickerItems = state.region ? [...new Map(shown.map(r=>[cityKey(r),city(r)])).entries()].sort((a,b)=>a[1].localeCompare(b[1],'ko')).map(([key,label])=>`<button class="back" data-city="${esc(key)}">${esc(label)} ${shown.filter(r=>cityKey(r)===key).length}</button>`) : regions.map(n=>{const count=qrows.filter(r=>region(r)===n).length;return count?`<button class="back" data-region="${n}">${n} ${count}</button>`:''});
     $('#picker').innerHTML = pickerItems.join('');
-    $('#picker').querySelectorAll('[data-region]').forEach(b=>activate(b,()=>{state.region=b.dataset.region;renderDomestic();})); $('#picker').querySelectorAll('[data-city]').forEach(b=>activate(b,()=>{state.city=b.dataset.city;state.date='';state.eventId='';renderDomestic();}));
-    $('#backBtn').style.display=state.region?'inline-block':'none'; $('#backBtn').textContent='← 전국'; $('#backBtn').onclick=()=>{state.region=null;renderDomestic();}; $('#hint').textContent=state.region?'버블 또는 도시 버튼을 눌러 지역 상세 달력 보기':'지역을 눌러 시·군 보기';
-    $('#detail').innerHTML=`<h2>지역 상세</h2><div id="dtitle">${state.region||`Q${state.q} · 전국`}</div><div id="dsub">행사 ${shown.length}건 · 분기별 수요 신호</div>${shown.slice(0,18).map(r=>card(r)).join('')||'<div class="empty-note">이 분기에는 등록된 행사가 없습니다.</div>'}`; bindEvents($('#detail'));
+    $('#picker').querySelectorAll('[data-region]').forEach(b=>activate(b,()=>{state.region=b.dataset.region;state.city=null;state.date='';state.eventId='';renderDomestic();})); $('#picker').querySelectorAll('[data-city]').forEach(b=>activate(b,()=>{state.city=b.dataset.city;state.date='';state.eventId='';renderDomestic();}));
+    $('#backBtn').style.display=state.region?'inline-block':'none'; $('#backBtn').textContent='← 전국'; $('#backBtn').onclick=()=>{state.region=null;renderDomestic();}; $('#hint').textContent=state.region?'핀 또는 도시명을 눌러 지역 상세 달력 보기':'핀 또는 지역명을 눌러 시·군 보기'; $('#mapTip').textContent=coverage==='uncollected'?'해당 연도·분기는 데이터 미수집 상태입니다. 회색 핀의 —는 0건을 뜻하지 않습니다.':state.region?'핀 또는 도시명을 눌러 해당 도시의 상세 달력을 확인하세요.':'지도는 위치를 보여줍니다. 핀 또는 지역명을 눌러 하위 시·군으로 이동하세요.';
+    $('#detail').innerHTML=`<h2>지역 상세</h2><div id="dtitle">${state.region||`${state.year}년 Q${state.q} · 전국`}</div><div id="dsub">${coverage==='uncollected'?'행사 데이터 미수집':`등록 행사 ${shown.length}건 · ${coverage==='complete'?'집계 완료':'집계 중'}`}</div>${shown.slice(0,18).map(r=>card(r)).join('')||`<div class="empty-note">${coverage==='uncollected'?'행사 데이터가 아직 수집되지 않았습니다.':'현재 등록된 행사가 0건입니다.'}</div>`}`; bindEvents($('#detail'));
+    if(state.region) hydrateRegionMap(renderId,shown,state.region,coverage); else hydrateNationalMap(renderId,qrows,coverage);
   }
   function init() {
     const count=domestic().length, excluded=rows.length-count; const ready=Array.isArray(window.MASTER_EVENT_ROWS) && rows.length>0;
     $('#homeEventCount').textContent=ready?`${count} events`:'unavailable';
-    document.querySelectorAll('.dataStatus').forEach(el=>el.textContent=ready?`Master Event List bundle 연결됨 · 2026 국내 ${count}건 표시 · ${excluded}건 제외(일정/도시/권역 기준)`:'Master Event List bundle을 불러오지 못했습니다');
+    const years=availableDomesticYears(),yearLabel=years.length>1?`${years[0]}–${years.at(-1)}`:String(years[0]);
+    const homeYear=$('#home .home-status .status-chip:last-child strong'); if(homeYear) homeYear.textContent=yearLabel;
+    document.querySelectorAll('.dataStatus').forEach(el=>el.textContent=ready?`Master Event List bundle 연결됨 · 국내 자료 ${count}건 · ${excluded}건 제외(일정/도시/권역 기준)`:'Master Event List bundle을 불러오지 못했습니다');
     ['gateG','gateD'].forEach(id=>{const el=$('#'+id);el.setAttribute('role','button');el.setAttribute('tabindex','0');});
     activate($('#gateG'),()=>show('global')); activate($('#gateD'),()=>show('domestic')); $('#backHome1').onclick=()=>show('home'); $('#backHome2').onclick=()=>show('home'); $('#eventModalBackdrop').onclick=()=>$('#eventModal').classList.remove('show'); $('#eventModalClose').onclick=()=>$('#eventModal').classList.remove('show'); document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#eventModal').classList.remove('show');});
     loadFx().then(()=>{ if(state.view==='global') renderGlobal(); });
   }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+  function boot() {
+    if(!cityConfig) {
+      console.error('[Event Calendar] city-normalization.js could not be loaded; domestic map startup cancelled.');
+      return;
+    }
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+  }
+  if(cityConfig) {
+    boot();
+  } else {
+    const configScript=document.createElement('script');
+    configScript.src='./city-normalization.js'; configScript.async=false;
+    configScript.onload=()=>{cityConfig=window.CITY_NORMALIZATION_CONFIG||null;boot();};
+    configScript.onerror=()=>console.error('[Event Calendar] city-normalization.js failed to load.');
+    document.head.appendChild(configScript);
+  }
 })();
