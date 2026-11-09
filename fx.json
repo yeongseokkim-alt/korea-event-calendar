@@ -1,12 +1,12 @@
 {
-  "rate": 1342,
-  "chg": 0.1,
-  "asOf": "2026-11-06",
+  "rate": 1357.9,
+  "chg": 1.18,
+  "asOf": "2026-11-09",
   "note": "USD/KRW 변동 참고 — 출발국 통화별 체감 환율·항공료·예약 추이를 함께 확인하세요.",
   "source": "BOK ECOS",
   "statCode": "731Y001",
   "itemCode": "0000001",
   "status": "ok",
-  "lastSuccessfulAt": "2026-11-07 01:05 KST",
-  "updatedAt": "2026-11-06T16:05:16.873Z"
+  "lastSuccessfulAt": "2026-11-10 03:58 KST",
+  "updatedAt": "2026-11-09T18:58:34.601Z"
 }
